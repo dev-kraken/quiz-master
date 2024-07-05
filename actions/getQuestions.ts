@@ -1,7 +1,6 @@
 "use server"
 import {createClient} from "@/utils/supabase/server";
 import {QueryData} from "@supabase/supabase-js";
-
 export const getQuestions = async () => {
     const supabase = createClient();
 
@@ -22,7 +21,6 @@ export const getQuestions = async () => {
     if (error) console.error('Error fetching questions:', error.message);
 
     if (!data) return []
-
     const questions: RandomQuestions = data
     return questions
 }
