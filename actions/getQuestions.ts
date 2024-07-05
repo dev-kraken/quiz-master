@@ -1,6 +1,7 @@
 "use server"
 import {createClient} from "@/utils/supabase/server";
 import {QueryData} from "@supabase/supabase-js";
+
 export const getQuestions = async () => {
     const supabase = createClient();
 
@@ -12,7 +13,6 @@ export const getQuestions = async () => {
             explanation,
             uuid,
             answers(option, is_correct)`)
-        .limit(10)
 
     type RandomQuestions = QueryData<typeof getRandomQuestions>
 

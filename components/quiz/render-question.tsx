@@ -5,6 +5,7 @@ import QuizCard from "@/components/quiz/quiz-card";
 const RenderQuestion = ({questions}: any) => {
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
     const [score, setScore] = useState(0);
+    const [onCompletedQuiz, setOnCompletedQuiz] = useState<boolean>(false);
 
     const handleAnswer = (selectedAnswerIndex: number): void => {
         const correctAnswerIndex = questions[currentQuestionIndex].answers.findIndex((answer: {
@@ -17,25 +18,30 @@ const RenderQuestion = ({questions}: any) => {
 
         const isLastQuestion = currentQuestionIndex === questions.length - 1;
 
-        setTimeout(() => {
-            if (isLastQuestion) {
-                console.log(`Quiz completed! Your score is ${score} out of ${questions.length}`);
-            } else {
-                setCurrentQuestionIndex(currentQuestionIndex + 1);
-            }
-        }, 5000);
+        if (isLastQuestion) {
+            setOnCompletedQuiz(true);
+        }
     };
     const question = questions[currentQuestionIndex];
 
     return (
         <div className="space-y-3 w-full">
-            <QuizCard
-                question={question.question}
-                code={question.code}
-                explanation={question.explanation}
-                answers={question.answers}
-                handleAnswer={handleAnswer}
-            />
+            {onCompletedQuiz && (
+                <div className="text-2xl font-bold text-center">
+                    You scored {score} out of {questions.length}!
+                </div>
+            )}
+            {!onCompletedQuiz && (
+                <QuizCard
+                    question={question.question}
+                    code={question.code}
+                    explanation={question.explanation}
+                    answers={question.answers}
+                    handleAnswer={handleAnswer}
+                    currentQuestionIndex={currentQuestionIndex}
+                    nextQuestion={setCurrentQuestionIndex}
+                />
+            )}
         </div>
     );
 };

@@ -22,9 +22,19 @@ interface QuizCardProps {
     explanation?: string;
     answers: Answer[];
     handleAnswer: (selectedAnswerIndex: number) => void;
+    currentQuestionIndex: number
+    nextQuestion: React.Dispatch<React.SetStateAction<number>>
 }
 
-const QuizCard = ({question, code, explanation, answers, handleAnswer}: QuizCardProps) => {
+const QuizCard = ({
+                      question,
+                      code,
+                      explanation,
+                      answers,
+                      handleAnswer,
+                      nextQuestion,
+                      currentQuestionIndex
+                  }: QuizCardProps) => {
     const [selectedAnswerIndex, setSelectedAnswerIndex] = useState<number | null>(null);
     const [showAnswers, setShowAnswers] = useState<boolean>(false);
     const [showExplanation, setShowExplanation] = useState<boolean>(false);
@@ -76,18 +86,23 @@ const QuizCard = ({question, code, explanation, answers, handleAnswer}: QuizCard
                 )}
             </CardContent>
             <CardFooter className="flex flex-1 flex-col justify-start items-center text-start gap-4 w-full">
-                {answers.map((answer, index) => (
-                    <Button
-                        key={index}
-                        onClick={() => handleAnswerClick(index)}
-                        variant="default"
-                        size="lg"
-                        className={cn(getButtonClass(index, answer.is_correct), 'w-full')}
-                        disabled={showAnswers}
-                    >
-                        {answer.option}
+                <>
+                    {answers.map((answer, index) => (
+                        <Button
+                            key={index}
+                            onClick={() => handleAnswerClick(index)}
+                            variant="default"
+                            size="lg"
+                            className={cn(getButtonClass(index, answer.is_correct), 'w-full')}
+                            disabled={showAnswers}
+                        >
+                            {answer.option}
+                        </Button>
+                    ))}
+                    <Button onClick={() => nextQuestion(currentQuestionIndex + 1)}>
+                        Next Quesiton
                     </Button>
-                ))}
+                </>
             </CardFooter>
         </Card>
     );
